@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <!-- 3×3 count-matrix mark: 1px black gutters, crisp at 16px -->
+  <rect width="16" height="16" fill="#111111"/>
+  <rect x="1" y="1" width="4" height="4" fill="#FFE500"/>
+  <rect x="6" y="1" width="4" height="4" fill="#FF5A8A"/>
+  <rect x="11" y="1" width="4" height="4" fill="#00D4C8"/>
+  <rect x="1" y="6" width="4" height="4" fill="#C8FF3D"/>
+  <rect x="6" y="6" width="4" height="4" fill="#FFF8EC"/>
+  <rect x="11" y="6" width="4" height="4" fill="#FF5A8A"/>
+  <rect x="1" y="11" width="4" height="4" fill="#00D4C8"/>
+  <rect x="6" y="11" width="4" height="4" fill="#FFE500"/>
+  <rect x="11" y="11" width="4" height="4" fill="#C8FF3D"/>
+</svg>
