@@ -251,8 +251,14 @@ adata = adata[~adata.obs["predicted_doublet"]].copy()`,
         ],
       },
       {
+        type: "callout",
+        kind: "cite",
+        title: "原书网页 Key takeaways",
+        body: "Shifted logarithm 适合稳定方差、随后做降维和差异表达；scran 被大量用在还要做批次校正的场景；analytic Pearson residuals 更适合选高变基因、找稀有类型。没有一种变换对所有下游都最优——按后面要做的事选，并在自己的数据上画图体检。",
+      },
+      {
         type: "p",
-        text: "这不是选美冠军。Heumos 他们写得很明白：归一化要按后续任务选，没有一种变换对所有下游都最优。sctransform 是 Pearson 残差路线在 R 里的近亲；scVI 则把归一化折进生成模型，不再单独给你一张「已经归一化好的矩阵」。",
+        text: "这不是选美冠军。Heumos 他们写得很明白：归一化要按后续任务选，没有一种变换对所有下游都最优。sctransform 是 Pearson 残差路线在 R 里的近亲；scVI 则把归一化折进生成模型，不再单独给你一张「已经归一化好的矩阵」。UMI 数据的理论模型是 Gamma-Poisson：方差 = μ + αμ²。网页正文把这句写在三种方法之前，是为了说明「为什么要变换」：大多数统计方法假定方差结构均匀，而原始计数显然不是。",
       },
       {
         type: "p",
@@ -365,9 +371,15 @@ adata.layers["pearson_residuals"] = csr_matrix(pr["X"])
         text: "好的 HVG 在细胞类型之间变，而不是在同一种细胞内部因为 dropout 乱跳。Fano factor、Seurat vst、Pearson 残差，都在试图把「均值越大方差越大」这件技术事实剥掉，留下超额的生物学方差。",
       },
       {
+        type: "callout",
+        kind: "cite",
+        title: "原书网页的另一条路：deviance",
+        body: "网页正文强调：传统 HVG / 高表达基因依赖已经归一化的矩阵，会被伪计数和 log1p 的任意选择带偏。scry 的 deviance 直接在原始 counts 上，衡量基因相对「恒定表达」零模型有多离谱，从而少吃一步归一化的偏见。不一定每次都换工具，但选基因时要知道：你正在把「哪一种偏见」写进后面的 PCA。",
+      },
+      {
         type: "figure",
         fig: "book-hvg-schematic",
-        caption: "原书示意图。灰色点是「均值-方差技术关系」上的基因，它们随表达量升高而变吵，但并不区分细胞类型。橙色点是偏离这条线的基因——细胞类型之间在变。特征选择要的是橙色，不是灰色。",
+        caption: "原书示意图。灰色点是「均值-方差技术关系」上的基因，它们随表达量升高而变吵，但并不区分细胞类型。橙色点是偏离这条线的基因——细胞类型之间在变。特征选择要的是橙色，不是灰色。网页把这件事概括成：选最有信息、最可变、或对常表达零模型最 deviant 的那一截。",
       },
       {
         type: "figure",
@@ -452,6 +464,12 @@ sc.pl.highly_variable_genes(adata)`,
       {
         type: "p",
         text: "单细胞矩阵又高又稀。直接在两万维里量距离，噪声会把类型差异淹没。降维其实在做两件不同的事：给算法一张好用的矮桌子（PCA、scVI 潜空间），给人眼一幅能看的画（UMAP、t-SNE）。把两件事混为一谈，是这条路上最贵的概念错误。",
+      },
+      {
+        type: "callout",
+        kind: "cite",
+        title: "原书网页 Key takeaways",
+        body: "PCA 是线性的，主成分按方差排序，可解释、算得快，适合给下游当桌子；但不适合拿来展示高度非线性、充满 dropout 的 scRNA-seq。UMAP 用图优化同时照顾局部和一部分全局结构，是看簇、看轨迹骨架的默认画布。统计分析走 PCA 或模型潜空间；UMAP / t-SNE 只负责展示。",
       },
       {
         type: "figure",

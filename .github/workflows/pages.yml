@@ -23,10 +23,13 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-      - run: npm ci
-      - run: npm run build:pages
+      - name: Install
+        run: npm install --no-audit --no-fund
+      - name: Build static site
+        run: npm run build:pages
         env:
           GITHUB_PAGES: "1"
+          VITE_AUTH_ENABLED: "false"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .vercel/output/static

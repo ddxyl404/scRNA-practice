@@ -33,7 +33,7 @@ export const INTRO_CHAPTERS: Chapter[] = [
       },
       {
         type: "p",
-        text: "它顺着 Theislab 的 Single-cell best practices 往下走。原书网页是 jupyter-book：上面有叙述、示意图、notebook 跑出来的图。这里改成给你读的中文。每一章只做三件事：这一步到底在干什么、为什么大家常这么选、选错了数据会变成什么样。标了「原书图」的，是原书网页上的示意图或实际输出，不是装饰。",
+        text: "它顺着 Theislab 的 Single-cell best practices 往下走。原书网页是 jupyter-book：上面有叙述、Key takeaways、示意图、好/差对照，下面才是 notebook。之前如果只对着 notebook 单元格读，会漏掉网页正文里那些真正把「为什么」讲清楚的图和句子。这里改成给你读的中文。每一章只做三件事：这一步到底在干什么、为什么大家常这么选、选错了数据会变成什么样。标了「原书图」的，优先来自网页正文。",
       },
       {
         type: "h2",
@@ -93,7 +93,7 @@ export const INTRO_CHAPTERS: Chapter[] = [
       },
       {
         type: "p",
-        text: "标了「原书图」的，是 sc-best-practices notebook 跑出来的真实输出，或原书自己的插图。坐标轴、颜色、簇的形状都来自那份公开数据，不是为了好看现画的。读的时候请停下来问三句：横轴纵轴是什么、颜色编码的是什么、这张图在支持（或打脸）哪一个分析决定。生成的概念图用来建立直觉——液滴、破细胞、城市地图——它们不代替定量结果。",
+        text: "标了「原书图」的，有两类，都来自 sc-best-practices.org 的**网页正文**，不是我另外画的。一类是 jupyter-book 写在叙述里的示意图和对照图——比如 FastQC 每一页的好/差并排、AnnData 结构、整合方法家族。另一类是同一页 notebook 跑出来的真实输出。坐标轴、颜色、簇的形状都来自那份公开数据。读的时候请停下来问三句：横轴纵轴是什么、颜色编码的是什么、这张图在支持（或打脸）哪一个分析决定。生成的概念图用来建立直觉——液滴、破细胞、城市地图——它们不代替定量结果。",
       },
       {
         type: "p",
@@ -161,6 +161,11 @@ print(adata)
       {
         type: "p",
         text: "把人体想成一座城市，而不是一块匀质的肉。城里住着上皮、免疫、基质、神经元，它们各干各的，也会在发育、受伤和生病时改行。bulk RNA-seq 相当于把整座街区打成浆，再测一次「平均口味」。单细胞是挨家挨户敲门。",
+      },
+      {
+        type: "figure",
+        fig: "book-hooke",
+        caption: "原书网页开篇就放了这张 1665 年的图：Robert Hooke 在 Micrographia 里画的软木细胞。细胞这个词比测序早了三百年。单细胞分析要做的，不是发明「细胞」这件事，而是承认城市里每一户都不一样，再分别去量。",
       },
       {
         type: "figure",
@@ -260,6 +265,17 @@ print(adata)
       {
         type: "p",
         text: "单细胞测序不是把 RNA-seq 缩小到一颗细胞那么简单。你得先把组织拆开（有时只能拆到核），再给每个细胞的转录本打上条码，经过反转录、扩增、建库、测序。每一步都会在矩阵里留下指纹。后面那些「奇怪的簇」，有时只是解离时没抓到成纤维。",
+      },
+      {
+        type: "figure",
+        fig: "book-quantify-exp",
+        caption: "原书网页正文的数量级图。转录不是水龙头，是一阵一阵的爆发（burst）：一个基因安静很久，突然吐出一串 mRNA。典型哺乳动物细胞里大约 10⁵–10⁶ 个 mRNA 分子，测序只能抓到其中一小截。所以矩阵里那么多零，不完全是「没表达」。读这张图，是为了后面遇到 dropout 时心里有数。",
+      },
+      {
+        type: "callout",
+        kind: "cite",
+        title: "原书网页怎么给技术分类",
+        body: "按隔离方式只分两大类：液滴（油包水，10x / Drop-seq / inDrop）和物理隔间（孔板、芯片，Smart-seq）。按读到什么再分：全长协议几乎整条转录本，tag-based 只读 3' 或 5' 末端。UMI 出现在 tag-based 里，用来对付 PCR 复印。网页把这些写在实验章正文，不是 notebook 附录。",
       },
       {
         type: "figure",
@@ -388,7 +404,7 @@ count[cell, gene] =  number of unique molecules
       {
         type: "figure",
         fig: "book-raw-fastqc",
-        caption: "原书里的 FastQC：Per sequence quality scores。高峰应该靠右（高质量）。如果整座山往左移，文库或测序出了问题，不是后面 MAD 能救的。",
+        caption: "原书网页 Figure 4：Per-base / per-read sequence quality 的好（左）与差（右）。好的图黄盒子落在绿色高质量区；差的图整条读段掉进红色。网页写明：末端略降到橙色是测序 syntheses 的常态，掉进红色才该修剪。",
       },
       {
         type: "figure",
@@ -416,8 +432,33 @@ count[cell, gene] =  number of unique molecules
         caption: "原书 FastQC：Adapter content。横轴是碱基位置，各条线是不同接头序列的比例。读段末端接头突然抬头，说明插入片段比读长还短，该切接头。10x 的 R1（条码+UMI）和 R2（插入）脾气不同，两张报告都要看。",
       },
       {
+        type: "figure",
+        fig: "book-raw-basic-stats",
+        caption: "原书网页 Figure 3：一份好文库的 Basic Statistics。盯 Filename、Total Sequences、Sequence length、%GC。高质量单细胞数据几乎没有 poor quality sequences，读长整齐，GC% 应该对得上这个物种的转录组。网页特意强调：FastQC 用同一套阈值打红灯，10x 的 R1（条码+UMI）经常被误判，真正要看的是生物读段 R2。",
+      },
+      {
+        type: "figure",
+        fig: "book-raw-per-tile",
+        caption: "原书网页 Figure 5：Per tile sequence quality，左好右差。每个小格是 flowcell 上的一块成像区。好的图通体蓝色；某处突然变暖，常常是气泡、油污或某块成像失灵。这不是细胞生物学，是测序仪当天的脾气——后面 MAD 救不了。",
+      },
+      {
+        type: "figure",
+        fig: "book-raw-n-content",
+        caption: "原书网页 Figure 9：Per base N content。N 表示测序仪认不出这个碱基。好的图整条线贴着 0；差的图从某个位置开始 N 往上爬。网页提醒：N 含量对条码读段和生物读段都有意义——条码里如果 N 很多，细胞身份会解析失败。",
+      },
+      {
+        type: "figure",
+        fig: "book-raw-duplication",
+        caption: "原书网页 Figure 11：Sequence duplication levels。横轴是某条序列被看到的次数，蓝线是去重前、红线是去重后。单细胞文库经过 PCR，一定有重复；但高峰如果完全塌到「被复制几十上百次」那一侧，文库复杂度不够，UMI 去重也变不出分子。",
+      },
+      {
+        type: "figure",
+        fig: "book-raw-length",
+        caption: "原书网页 Figure 10：Sequence length distribution。好的图是一根尖刺（读长被仪器卡死）；差的图拖出一长串不同长度。如果看到比预期短一截的肩膀，常常是插入片段太短、接头被读进去了，该回到 Adapter content 那张图。",
+      },
+      {
         type: "p",
-        text: "FastQC 不是单细胞专用的，但在原始处理这一步它最有用。你会连续看三张图：质量高峰靠不靠右、GC 是不是单峰、接头有没有在末端抬头。三张都干净，才值得把计算预算砸进比对。任何一张明显异常，先回头查文库——定量器会很配合地把垃圾也定量进去。",
+        text: "FastQC 不是单细胞专用的，但原书网页专门用一整节好/差对照来教你读报告：质量高峰靠不靠右、GC 是不是单峰、接头有没有在末端抬头、N 有没有爬起来、flowcell 某一格有没有变暖。三张关键图都干净，才值得把计算预算砸进比对。任何一张明显异常，先回头查文库——定量器会很配合地把垃圾也定量进去。网页还写了一句容易漏：许多模块只对生物读段（10x 的 R2）有意义，条码读段的碱基组成本来就不随机。",
       },
       {
         type: "h2",

@@ -27,6 +27,12 @@ export const DOWNSTREAM_CHAPTERS: Chapter[] = [
         text: "「哪些基因在疾病里变了」听起来像单细胞的本职工作，却是最容易在统计上翻车的一步。经典错误：把每个细胞当成独立重复。于是 8000 个 T 细胞对 8000 个 T 细胞，p 值全部小于 10⁻⁵⁰。真正的重复，其实只有 4 个病人。",
       },
       {
+        type: "callout",
+        kind: "cite",
+        title: "原书网页 Key takeaways",
+        body: "差异表达有两种视角：细胞级和样本级。对 scRNA-seq，样本级被证明更稳。按供体 × 细胞类型把 counts 加总成伪 bulk，再交给 edgeR / DESeq2。建模前先对伪 bulk 做 PCA，把看见的变异源写进 design。低表达基因要按细胞类型分别过滤。网页还点名：单细胞专用方法更容易把高表达基因误判成差异基因；Wilcoxon / 默认 Seurat 若不处理供体结构，就是伪重复。",
+      },
+      {
         type: "figure",
         fig: "book-dge-schematic",
         caption: "原书示意图。左边是细胞级检验（每个点是一个细胞），右边是样本级伪 bulk（每个点是一个供体 × 细胞类型）。原书的结论很硬：问处理效应时，走右边。",
@@ -154,6 +160,12 @@ print(res.head(15)[["log2FoldChange", "padj"]])`,
       {
         type: "p",
         text: "单细胞论文里最显眼的条形图，往往是「疾病组巨噬细胞从 8% 涨到 22%」。百分比有一个讨厌的脾气：它们加起来必须是 1。一种细胞上涨，其他细胞的份额被自动挤下去，哪怕绝对数量没变。普通 t 检验把各类型当成独立变量，会制造一串假阳性。",
+      },
+      {
+        type: "callout",
+        kind: "cite",
+        title: "原书网页想让你记住的",
+        body: "组成数据住在单纯形上：一类涨，其余被挤。分析单位是样本，不是细胞。专门的 Dirichlet / scCODA / propeller 把定和约束写进模型；对原始百分比做 t 检验，等于假装各类型互相独立。解离偏好会假装成疾病浸润——实验设计比模型更早介入。",
       },
       {
         type: "figure",
@@ -338,6 +350,11 @@ sc.pl.umap(adata, color=["JAK-STAT", "Trail"], cmap="coolwarm")`,
         type: "figure",
         fig: "book-pert-eccite",
         caption: "原书：ECCITE 一类实验把 CRISPR 扰动、抗体蛋白和转录组接到同一颗细胞上。分析的第一件事仍是确认 guide 赋值和靶基因下调，而不是直接画漂亮的网络。",
+      },
+      {
+        type: "figure",
+        fig: "book-tumor-tracing",
+        caption: "原书网页（谱系示踪章）的示意图：CRISPR 把随机条码写进基因组，子细胞带着同一串疤。肿瘤里的克隆扩张、治疗抗性，靠的是这条「写进 DNA 的时间线」，不是 UMAP 上的距离。扰动实验和谱系示踪经常做在同一套数据上——网页把它们分开讲，是怕你把「切了一刀」和「谁是谁的后代」混成一张图。",
       },
       {
         type: "h2",
@@ -652,6 +669,12 @@ sc.pl.umap(adata, color=["GATA1", "GATA1_regulon"])`,
         caption: "原书示意图：发送者表达配体，接收者表达受体，数据库把它们配对打分。测量的始终是 mRNA。",
       },
       {
+        type: "callout",
+        kind: "cite",
+        title: "原书网页把限制画成一张图",
+        body: "网页正文的 limitations 图（下面那张）不是装饰：忽略空间邻近、忽略多亚基受体、忽略翻译后修饰、忽略一对多。LIANA 把 CellPhoneDB / CellChat / NicheNet 等汇总，是为了少信一家数据库的偏见，不是为了让弦图更粗。",
+      },
+      {
         type: "figure",
         fig: "talking-cells",
         caption: "图上画得很亲热。数据里只有两边的 mRNA。它们是不是真的挨着、蛋白在不在、受体能不能工作，图都不知道。",
@@ -745,7 +768,7 @@ li.pl.dotplot(
       {
         type: "figure",
         fig: "book-spatial-intro",
-        caption: "原书开篇：空间技术按分辨率和基因覆盖排成谱。点状捕获覆盖全转录组但一个点可能混多种细胞；成像原位分辨率高但基因数有限。分析任务跟着技术走：点状几乎一定要反卷积。",
+        caption: "原书开篇：空间技术按分辨率和基因覆盖排成谱。点状捕获覆盖全转录组但一个点可能混多种细胞；成像原位分辨率高但基因数有限。分析任务跟着技术走：点状几乎一定要反卷积。这张图在网页正文里，不在 notebook 输出里。",
       },
       {
         type: "figure",
